@@ -37,7 +37,9 @@ same tx re-serves the result (idempotent).
   block number, receipt id. ~$0.002 (exact amount given per order).
 - GET {goldshop}/x402/{item} — buy source packages. Items: `bundle` ($99,
   all 21 apps), `app:goldshop` ($49, this checkout itself),
-  `app:<slug>` ($29 each). Returns a download URL after on-chain verify.
+  `app:<slug>` ($29 each), `x402stack` ($9, secretdock+ogdock+qrdock —
+  the three agent-payable apps). Returns a download URL after on-chain
+  verify.
 - GET {ogdock}/x402/og.png — OG/social image render, $0.005 per call.
 - GET {qrdock}/x402/qr.png — QR PNG render, $0.005 per call.
 - GET {markdock}/x402/render — markdown → CommonMark HTML, $0.002.
