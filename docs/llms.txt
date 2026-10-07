@@ -31,7 +31,8 @@ recipient + exact amount, race-safe atomic claim). Repeating the oid'd
 URL without a tx re-serves the same requirement; repeating with the
 same tx re-serves the result (idempotent).
 
-- GET {goldshop}/x402/verify?tx=0x..&to=0x..&min=<atomicUnits>
+- GET {goldshop}/x402/verify?tx=..&to=..&min=<units>&chain=base|bitcoin|tron
+  — multi-chain settlement attestation (USDC-Base sats-BTC units-USDT-TRC20),
   Settlement attestation: which addresses received how much USDC in `tx`,
   block number, receipt id. ~$0.002 (exact amount given per order).
 - GET {goldshop}/x402/{item} — buy source packages. Items: `bundle` ($99,
