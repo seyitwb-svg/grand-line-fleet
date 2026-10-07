@@ -1,5 +1,10 @@
 # Grand Line — 20 self-hosted micro-SaaS tools
 
+![apps](https://img.shields.io/badge/apps-21-orange)
+![runtime](https://img.shields.io/badge/runtime-python%2Bsqlite-green)
+![deploy](https://img.shields.io/badge/deploy-docker-blue)
+![payment](https://img.shields.io/badge/payment-BTC%2BUSDT-f7931a)
+
 Own the code. Skip the rent. One flat price — paid in BTC or USDT,
 delivered automatically on-chain. No Stripe, no account, no KYC.
 
