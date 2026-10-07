@@ -16,27 +16,19 @@ store it, optionally fire a webhoo">
 </style>
 <nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
  <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
-# A Formspree alternative you actually own
-
-Form backends are the simplest paid API on the internet: accept a POST,
-store it, optionally fire a webhook. Formspree charges $10+/month for that.
-
-## The self-hosted version
-
-FormDock gives you a form endpoint, submission storage, a spam flag,
+<h1>A Formspree alternative you actually own</h1>
+<p>Form backends are the simplest paid API on the internet: accept a POST,
+store it, optionally fire a webhook. Formspree charges $10+/month for that.</p>
+<h2>The self-hosted version</h2>
+<p>FormDock gives you a form endpoint, submission storage, a spam flag,
 auto-retention (7/30/90 days — GDPR-friendly), and per-form webhooks that
-POST each submission as JSON to any URL (Slack, Zapier, your own app).
-
-## Deploy
-
-```bash
-docker build -t formdock app/
+POST each submission as JSON to any URL (Slack, Zapier, your own app).</p>
+<h2>Deploy</h2>
+<pre><code class="language-bash">docker build -t formdock app/
 docker run -d -p 8000:8000 -v formdock-data:/data formdock
-```
-
-Point your static site's `<form action>` at it. Done.
-
-[Get the source for $29](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=%2Fshop) — [all 20 tools for $99](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=%2Fshop)
+</code></pre>
+<p>Point your static site's <code>&lt;form action&gt;</code> at it. Done.</p>
+<p><a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=%2Fshop">Get the source for $29</a> — <a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=%2Fshop">all 20 tools for $99</a></p>
 
 <hr>
 <p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —

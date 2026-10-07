@@ -1,0 +1,57 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent-payable fetch &amp; token APIs (x402, USDC on Base) — Grand Line Guides</title>
+<meta name="description" content="# Agent-payable fetch &amp; token APIs: x402 endpoints that settle direct on Base
+
+AI agents that need web data or token lookups can pay per call instead ">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/agent-payable-fetch-token-apis.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+<h1>Agent-payable fetch &amp; token APIs: x402 endpoints that settle direct on Base</h1>
+<p>AI agents that need web data or token lookups can pay per call instead of
+signing up for an API plan. These endpoints answer HTTP 402 with a unique
+jittered amount and order id; your agent pays exact USDC on Base, retries
+with the tx hash, and gets the result. No account, no API key, no
+facilitator — settlement is verified straight against a public Base RPC.</p>
+<h2>/x402/pagescan — fetch + parse any URL (~$0.005)</h2>
+<p>Returns page title, meta description, link list and a clean text excerpt
+of any public URL. Fetched server-side with no JavaScript and no redirect
+following; private, link-local and reserved hosts are refused at DNS time.</p>
+<pre><code>GET {goldshop}/x402/pagescan?url=https://example.com
+</code></pre>
+<p>Try it free first — one demo call per client proves delivery before an
+agent spends anything:</p>
+<pre><code>GET {goldshop}/x402/free/pagescan?url=https://example.com
+</code></pre>
+<h2>/x402/tokeninfo — ERC-20 info on Base (~$0.005)</h2>
+<p>Reads a token contract straight off the chain via eth_call: name, symbol,
+decimals, total supply and contract bytecode size. Works on any Base
+contract, including non-standard bytes32-returning tokens.</p>
+<pre><code>GET {goldshop}/x402/tokeninfo?address=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+</code></pre>
+<h2>/x402/verify — settlement attestation (~$0.002)</h2>
+<p>Did a given transaction pay at least <code>min</code> to <code>to</code>? Works on Base (USDC
+units), bitcoin (sats) and tron (USDT-TRC20 atomic units). Useful when an
+agent needs independent confirmation before trusting a payment claim.</p>
+<pre><code>GET {goldshop}/x402/verify?tx=&lt;txhash&gt;&amp;to=&lt;recipient&gt;&amp;min=&lt;units&gt;&amp;chain=base
+</code></pre>
+<h2>The payment model in one paragraph</h2>
+<p>Each 402 response carries a unique jittered amount (<code>amount</code> in the
+<code>accepts</code> entry) plus an <code>orderId</code>. Paying exactly that amount to <code>payTo</code>
+and retrying with <code>X-PAYMENT</code> set to the transaction hash redeems the
+order. The transaction can only be claimed once — replays get an
+idempotent re-serve of the same result instead of a double-spend. Full
+resource directory: <code>/.well-known/x402</code> on the store.</p>
+
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>

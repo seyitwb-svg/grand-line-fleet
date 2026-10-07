@@ -16,29 +16,24 @@ documents to a payment">
 </style>
 <nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
  <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
-# Paying for software in BTC — how our checkout works
-
-We sell self-hosted source. Self-hosters shouldn't need to hand identity
-documents to a payment processor to buy code.
-
-## The mechanics
-
-1. You click buy - we quote an **exact** satoshi amount (plus a tiny unique
-   jitter) and a BTC address — or a USDT-TRC20 amount for stablecoin payers.
-2. You send the transfer from any wallet or exchange.
-3. We watch the mempool via public APIs; the unique amount identifies your
-   order. One network confirmation - your download link unlocks.
-
-No account, no email verification, no card. The payment itself is the
-receipt — your txid is the proof of purchase.
-
-## Why it matters for liability
-
-There is no merchant account to freeze, no platform to deplatform either
+<h1>Paying for software in BTC — how our checkout works</h1>
+<p>We sell self-hosted source. Self-hosters shouldn't need to hand identity
+documents to a payment processor to buy code.</p>
+<h2>The mechanics</h2>
+<ol>
+<li>You click buy - we quote an <strong>exact</strong> satoshi amount (plus a tiny unique
+jitter) and a BTC address — or a USDT-TRC20 amount for stablecoin payers.</li>
+<li>You send the transfer from any wallet or exchange.</li>
+<li>We watch the mempool via public APIs; the unique amount identifies your
+order. One network confirmation - your download link unlocks.</li>
+</ol>
+<p>No account, no email verification, no card. The payment itself is the
+receipt — your txid is the proof of purchase.</p>
+<h2>Why it matters for liability</h2>
+<p>There is no merchant account to freeze, no platform to deplatform either
 side, and no personal data to leak — we store an order id, an amount, and
-a txid.
-
-[The shop](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=%2Fshop)
+a txid.</p>
+<p><a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=%2Fshop">The shop</a></p>
 
 <hr>
 <p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —

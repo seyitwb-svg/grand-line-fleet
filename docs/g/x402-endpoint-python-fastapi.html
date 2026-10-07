@@ -16,82 +16,65 @@ payment, verify it on-ch">
 </style>
 <nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
  <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
-# x402 in Python: a complete payable endpoint (FastAPI)
-
-A working, production-reviewed x402 endpoint is ~150 lines: demand a
+<h1>x402 in Python: a complete payable endpoint (FastAPI)</h1>
+<p>A working, production-reviewed x402 endpoint is ~150 lines: demand a
 payment, verify it on-chain, serve the resource. This is the exact
-pattern running on four endpoints of a live software store.
-
-## The pieces
-
-```python
-# 1. Demand — answer 402 with a UNIQUE order amount
+pattern running on four endpoints of a live software store.</p>
+<h2>The pieces</h2>
+<pre><code class="language-python"># 1. Demand — answer 402 with a UNIQUE order amount
 oid = secrets.token_hex(6)
 units = BASE_PRICE + secrets.randbelow(10_000)   # jitter!
-db.exec("INSERT INTO x402_calls(oid,units,created) VALUES(?,?,?)",
+db.exec(&quot;INSERT INTO x402_calls(oid,units,created) VALUES(?,?,?)&quot;,
         (oid, units, now))
 return JSONResponse(pay_req(oid, units), status_code=402)
-```
-
-`pay_req` returns `x402Version: 2`, `accepts[0]` with
-`scheme: "exact"`, `network: "eip155:8453"`, `amount: str(units)`,
-the USDC contract `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`,
-your `payTo`, and `extra.orderId` = oid. The resource URL embeds
-`?oid={oid}`.
-
-```python
-# 2. Redeem — verify exact units to payTo, claim atomically
+</code></pre>
+<p><code>pay_req</code> returns <code>x402Version: 2</code>, <code>accepts[0]</code> with
+<code>scheme: &quot;exact&quot;</code>, <code>network: &quot;eip155:8453&quot;</code>, <code>amount: str(units)</code>,
+the USDC contract <code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code>,
+your <code>payTo</code>, and <code>extra.orderId</code> = oid. The resource URL embeds
+<code>?oid={oid}</code>.</p>
+<pre><code class="language-python"># 2. Redeem — verify exact units to payTo, claim atomically
 units, ok = usdc_to_payto(tx_hash)          # receipt parse, not getLogs
-if not ok or units != call["units"]:        # EXACT match or reject
+if not ok or units != call[&quot;units&quot;]:        # EXACT match or reject
     return 402
 try:
-    db.exec("INSERT INTO x402_tx(txid) VALUES(?)", (tx_hash,))
+    db.exec(&quot;INSERT INTO x402_tx(txid) VALUES(?)&quot;, (tx_hash,))
 except IntegrityError:                       # already claimed — reject
     return 402
-db.exec("UPDATE x402_calls SET status='redeemed', txid=? WHERE oid=?",
+db.exec(&quot;UPDATE x402_calls SET status='redeemed', txid=? WHERE oid=?&quot;,
         (tx_hash, oid))
 return serve_resource()
-```
-
-## Why the jitter
-
-If every order demands the same amount, a single public tx hash
-redeems *all* of them — buyers just reuse a hash they find on-chain.
-A per-order `base + randbelow(10000)` atomic-unit amount means each
+</code></pre>
+<h2>Why the jitter</h2>
+<p>If every order demands the same amount, a single public tx hash
+redeems <em>all</em> of them — buyers just reuse a hash they find on-chain.
+A per-order <code>base + randbelow(10000)</code> atomic-unit amount means each
 order has a unique price; the tx's actual USDC transfers must sum to
-exactly that for your `payTo`. One payment → one order, fleet-wide.
-
-## X-PAYMENT parsing
-
-Accept all three shapes buyers send:
-
-```python
-raw = request.headers.get("x-payment", "")
-if raw.startswith("0x") and len(raw) == 66:
+exactly that for your <code>payTo</code>. One payment → one order, fleet-wide.</p>
+<h2>X-PAYMENT parsing</h2>
+<p>Accept all three shapes buyers send:</p>
+<pre><code class="language-python">raw = request.headers.get(&quot;x-payment&quot;, &quot;&quot;)
+if raw.startswith(&quot;0x&quot;) and len(raw) == 66:
     txh = raw
-elif raw.startswith("{"):
-    txh = json.loads(raw)["payload"]["txHash"]
+elif raw.startswith(&quot;{&quot;):
+    txh = json.loads(raw)[&quot;payload&quot;][&quot;txHash&quot;]
 else:                                        # base64 spec JSON
-    txh = json.loads(base64.b64decode(raw))["payload"]["txHash"]
-```
-
-## On-chain verification without a facilitator
-
-`eth_getTransactionReceipt` on any public Base RPC, then sum the USDC
-`Transfer` logs where `topic[2]` (the recipient) equals your address:
-
-- set a neutral `User-Agent` (bare `Python-urllib` is 403'd under load)
-- `status == "0x1"` only; pending receipts lack it
-- check `log.address == USDC` — other contracts emit Transfer too
-
-MIT drop-in with 5 RPC fallbacks:
-<https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py>
-
-## Idempotent re-serve
-
-Agents retry. `status='redeemed' AND txid=<same>` → serve the stored
-result again; `redeemed AND txid=<different>` → 402 error. Never
-double-charge, never lose a paid request to a flaky connection.
+    txh = json.loads(base64.b64decode(raw))[&quot;payload&quot;][&quot;txHash&quot;]
+</code></pre>
+<h2>On-chain verification without a facilitator</h2>
+<p><code>eth_getTransactionReceipt</code> on any public Base RPC, then sum the USDC
+<code>Transfer</code> logs where <code>topic[2]</code> (the recipient) equals your address:</p>
+<ul>
+<li>set a neutral <code>User-Agent</code> (bare <code>Python-urllib</code> is 403'd under load)</li>
+<li><code>status == &quot;0x1&quot;</code> only; pending receipts lack it</li>
+<li>check <code>log.address == USDC</code> — other contracts emit Transfer too</li>
+</ul>
+<p>MIT drop-in with 5 RPC fallbacks:
+<a href="https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py">https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py</a></p>
+<h2>Idempotent re-serve</h2>
+<p>Agents retry. <code>status='redeemed' AND txid=&lt;same&gt;</code> → serve the stored
+result again; <code>redeemed AND txid=&lt;different&gt;</code> → 402 error. Never
+double-charge, never lose a paid request to a flaky connection.</p>
 
 <hr>
 <p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —

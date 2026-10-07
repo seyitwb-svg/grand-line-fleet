@@ -15,39 +15,32 @@ actually pay at leas">
 </style>
 <nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
  <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
-A paid settlement attestation endpoint that answers the one
+<p>A paid settlement attestation endpoint that answers the one
 question every crypto-paid service eventually asks: did transaction X
-actually pay at least N units to address Y?
-
-**The endpoint** lives on the [Grand Line store](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop) and is payable via x402 — $0.002 USDC on Base per check, no account, no API key, no signup.
-
-```
-GET /x402/verify?tx=<txid>&to=<addr>&min=<units>&chain=base|bitcoin|tron
-```
-
-| chain   | `tx` format      | `min` units          | independent check via |
+actually pay at least N units to address Y?</p>
+<p><strong>The endpoint</strong> lives on the <a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=/shop">Grand Line store</a> and is payable via x402 — $0.002 USDC on Base per check, no account, no API key, no signup.</p>
+<pre><code>GET /x402/verify?tx=&lt;txid&gt;&amp;to=&lt;addr&gt;&amp;min=&lt;units&gt;&amp;chain=base|bitcoin|tron
+</code></pre>
+<p>| chain   | <code>tx</code> format      | <code>min</code> units          | independent check via |
 |---------|------------------|----------------------|-----------------------|
-| base    | `0x<64 hex>`     | USDC atomic units    | Base RPC receipt      |
-| bitcoin | `<64 hex txid>`  | satoshis             | mempool.space         |
-| tron    | `<64 hex txid>`  | USDT-TRC20 units     | TronGrid              |
-
-**The answer** is a JSON attestation: `verified`, the amount that
-actually reached `to`, confirmations, and a stable `receipt_id` you can
-store. Unconfirmed bitcoin transactions verify `false` — a conservative
-default you should copy.
-
-**Why three chains?** Every x402 verifier we have seen is EVM-only. But
+| base    | <code>0x&lt;64 hex&gt;</code>     | USDC atomic units    | Base RPC receipt      |
+| bitcoin | <code>&lt;64 hex txid&gt;</code>  | satoshis             | mempool.space         |
+| tron    | <code>&lt;64 hex txid&gt;</code>  | USDT-TRC20 units     | TronGrid              |</p>
+<p><strong>The answer</strong> is a JSON attestation: <code>verified</code>, the amount that
+actually reached <code>to</code>, confirmations, and a stable <code>receipt_id</code> you can
+store. Unconfirmed bitcoin transactions verify <code>false</code> — a conservative
+default you should copy.</p>
+<p><strong>Why three chains?</strong> Every x402 verifier we have seen is EVM-only. But
 real buyers still pay in BTC and USDT. If your product accepts more than
 one chain, your settlement check should too — ideally from a party that
-is not you and not your payment processor.
-
-**How to pay it**: send exactly the USDC amount the 402 response demands
+is not you and not your payment processor.</p>
+<p><strong>How to pay it</strong>: send exactly the USDC amount the 402 response demands
 (accepts[0].amount) to payTo on Base, then repeat the request with
-`X-PAYMENT: {"payload":{"txHash":"0x..."}}`. The order model is
+<code>X-PAYMENT: {&quot;payload&quot;:{&quot;txHash&quot;:&quot;0x...&quot;}}</code>. The order model is
 replay-safe: unique jittered amount per order, atomic tx claim,
-idempotent re-serve.
+idempotent re-serve.</p>
+<p>Related: <a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&amp;p=/d/grandline/sell-apis-to-ai-agents-x402">sell APIs to AI agents with x402</a> · <a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&amp;p=/d/grandline/monetize-api-without-stripe">monetize an API without Stripe</a></p>
 
-Related: [sell APIs to AI agents with x402](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&p=/d/grandline/sell-apis-to-ai-agents-x402) · [monetize an API without Stripe](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&p=/d/grandline/monetize-api-without-stripe)
 <hr>
 <p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
 21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·

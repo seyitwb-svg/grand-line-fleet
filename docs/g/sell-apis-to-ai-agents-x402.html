@@ -16,66 +16,61 @@ directories, see a">
 </style>
 <nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
  <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
-# Sell an API to AI agents — x402 on Base, no facilitator
-
-AI agents with wallets are a real buyer segment now: they browse service
+<h1>Sell an API to AI agents — x402 on Base, no facilitator</h1>
+<p>AI agents with wallets are a real buyer segment now: they browse service
 directories, see an HTTP 402, pay USDC on Base, and consume the resource —
 no account, no API key, no checkout page. This guide shows the exact
 serving pattern that survived an adversarial security review in
-production.
-
-## The flow (facilitator-free `exact` scheme)
-
-1. Agent `GET`s your payable resource.
-2. You answer `402` with an `accepts` array: USDC contract on Base
-   (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`), network
-   `eip155:8453`, your `payTo` address — **and a unique jittered amount
-   plus a unique order id embedded in `resource.url`**.
-3. The agent broadcasts a USDC transfer of *exactly* that amount.
-4. It retries the order'd URL with the tx hash in `X-PAYMENT`
-   (spec JSON or a bare `0x…` both work).
-5. You verify on-chain and serve. Re-requesting the same order id
-   returns the same requirement (no re-jitter); re-presenting the same
-   tx re-serves the result (idempotent).
-
-## The four traps that cost real money
-
-- **Replay across orders.** If every order demands the same price, one
-  public tx hash redeems *everything*. Fix: jitter each amount
-  (`base + randbelow(10_000)` atomic units) and require exact match.
-- **Check-then-insert races.** `SELECT txid …; INSERT txid` under two
-  concurrent redeemers double-serves. Fix: `INSERT` on a PK'd table
-  *first*, catch `IntegrityError` — that is your claim.
-- **eth_getLogs rate limits.** Public Base RPCs cap log queries on the
-  USDC contract at single digits per day. `eth_getTransactionReceipt`
-  is unlimited and carries the same Transfer events — parse it.
-- **Default library UAs.** Bare `Python-urllib` gets 403'd on public
-  RPCs under load. Set any neutral `User-Agent`.
-
-## Reference verifier (MIT)
-
-Drop-in ~100-line implementation with 5 RPC fallbacks:
-`usdc_transfers(tx) → ({recipient: units}, block, ok)` and
-`paid_at_least(tx, payTo, min)`.
-
-<https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py>
-
-## Live example
-
-Our own store sells 21 self-hosted apps over this rail, plus a $0.002
-settlement-attestation endpoint (check whether *someone else's* tx
-actually paid you):
-
-- Agent docs: <https://seyitwb-svg.github.io/grand-line-fleet/llms.txt>
-- Store: <https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop>
-
-## Notes for sellers
-
-- `status == "0x1"` only — pending receipts arrive without it.
-- Sub-cent goods can skip block-confirmation waits; anything priced in
-  dollars should require a few confirmations.
-- Keep a per-order idempotent re-serve path — agents retry, and a lost
-  connection must not mean a lost sale.
+production.</p>
+<h2>The flow (facilitator-free <code>exact</code> scheme)</h2>
+<ol>
+<li>Agent <code>GET</code>s your payable resource.</li>
+<li>You answer <code>402</code> with an <code>accepts</code> array: USDC contract on Base
+(<code>0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code>), network
+<code>eip155:8453</code>, your <code>payTo</code> address — <strong>and a unique jittered amount
+plus a unique order id embedded in <code>resource.url</code></strong>.</li>
+<li>The agent broadcasts a USDC transfer of <em>exactly</em> that amount.</li>
+<li>It retries the order'd URL with the tx hash in <code>X-PAYMENT</code>
+(spec JSON or a bare <code>0x…</code> both work).</li>
+<li>You verify on-chain and serve. Re-requesting the same order id
+returns the same requirement (no re-jitter); re-presenting the same
+tx re-serves the result (idempotent).</li>
+</ol>
+<h2>The four traps that cost real money</h2>
+<ul>
+<li><strong>Replay across orders.</strong> If every order demands the same price, one
+public tx hash redeems <em>everything</em>. Fix: jitter each amount
+(<code>base + randbelow(10_000)</code> atomic units) and require exact match.</li>
+<li><strong>Check-then-insert races.</strong> <code>SELECT txid …; INSERT txid</code> under two
+concurrent redeemers double-serves. Fix: <code>INSERT</code> on a PK'd table
+<em>first</em>, catch <code>IntegrityError</code> — that is your claim.</li>
+<li><strong>eth_getLogs rate limits.</strong> Public Base RPCs cap log queries on the
+USDC contract at single digits per day. <code>eth_getTransactionReceipt</code>
+is unlimited and carries the same Transfer events — parse it.</li>
+<li><strong>Default library UAs.</strong> Bare <code>Python-urllib</code> gets 403'd on public
+RPCs under load. Set any neutral <code>User-Agent</code>.</li>
+</ul>
+<h2>Reference verifier (MIT)</h2>
+<p>Drop-in ~100-line implementation with 5 RPC fallbacks:
+<code>usdc_transfers(tx) → ({recipient: units}, block, ok)</code> and
+<code>paid_at_least(tx, payTo, min)</code>.</p>
+<p><a href="https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py">https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py</a></p>
+<h2>Live example</h2>
+<p>Our own store sells 21 self-hosted apps over this rail, plus a $0.002
+settlement-attestation endpoint (check whether <em>someone else's</em> tx
+actually paid you):</p>
+<ul>
+<li>Agent docs: <a href="https://seyitwb-svg.github.io/grand-line-fleet/llms.txt">https://seyitwb-svg.github.io/grand-line-fleet/llms.txt</a></li>
+<li>Store: <a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=/shop">https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=/shop</a></li>
+</ul>
+<h2>Notes for sellers</h2>
+<ul>
+<li><code>status == &quot;0x1&quot;</code> only — pending receipts arrive without it.</li>
+<li>Sub-cent goods can skip block-confirmation waits; anything priced in
+dollars should require a few confirmations.</li>
+<li>Keep a per-order idempotent re-serve path — agents retry, and a lost
+connection must not mean a lost sale.</li>
+</ul>
 
 <hr>
 <p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —

@@ -16,52 +16,46 @@ of onboarding. I">
 </style>
 <nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
  <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
-# Monetize an API without Stripe: crypto pay-per-call, no KYC
-
-Stripe needs a business entity, bank account, KYC documents, and weeks
+<h1>Monetize an API without Stripe: crypto pay-per-call, no KYC</h1>
+<p>Stripe needs a business entity, bank account, KYC documents, and weeks
 of onboarding. If you're selling to developers — or to AI agents —
 there's a lighter stack: per-call USDC payments on Base, verified
-on-chain, settled straight to your wallet in seconds.
-
-## The two viable rails
-
-**x402 (HTTP 402, USDC on Base)** — the agent-native one. Your endpoint
+on-chain, settled straight to your wallet in seconds.</p>
+<h2>The two viable rails</h2>
+<p><strong>x402 (HTTP 402, USDC on Base)</strong> — the agent-native one. Your endpoint
 answers 402 with payment requirements; the caller pays on-chain and
 retries with the tx hash. No accounts, no API keys, no checkout page.
 Coinbase's Bazaar indexes facilitator-served resources; facilitator-free
-serving works too and costs you nothing but an RPC call.
-
-**Plain crypto checkout (BTC/USDT)** — the human-native one. A unique
+serving works too and costs you nothing but an RPC call.</p>
+<p><strong>Plain crypto checkout (BTC/USDT)</strong> — the human-native one. A unique
 jittered amount per order lets you auto-match payments to orders with
-nothing but mempool.space/trongrid API calls. ~200 lines total.
-
-## What you skip
-
-- No merchant account, no PCI scope, no chargeback handling
-- No card data, no 3DS flows, no currency conversion dance
-- No custodial processor holding your money hostage
-
-## What you trade
-
-- Buyers need crypto (USDC on Base is the cheapest path — sub-cent fees)
-- No invoicing/tax-doc automation — you handle accounting yourself
-- Refunds are manual (you send the tx yourself)
-
-## The honest fit test
-
-x402 pay-per-call shines for: API calls under $1, agent-consumable
+nothing but mempool.space/trongrid API calls. ~200 lines total.</p>
+<h2>What you skip</h2>
+<ul>
+<li>No merchant account, no PCI scope, no chargeback handling</li>
+<li>No card data, no 3DS flows, no currency conversion dance</li>
+<li>No custodial processor holding your money hostage</li>
+</ul>
+<h2>What you trade</h2>
+<ul>
+<li>Buyers need crypto (USDC on Base is the cheapest path — sub-cent fees)</li>
+<li>No invoicing/tax-doc automation — you handle accounting yourself</li>
+<li>Refunds are manual (you send the tx yourself)</li>
+</ul>
+<h2>The honest fit test</h2>
+<p>x402 pay-per-call shines for: API calls under $1, agent-consumable
 resources (renders, checks, transforms), and sellers without a business
 entity. It's wrong for: enterprise customers needing invoices, anything
-regulated, subscriptions with complex billing.
-
-## A working store doing exactly this
-
-- 21 self-hosted apps, sold via BTC/USDT/x402:
-  <https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop>
-- Agent docs + payable endpoint list:
-  <https://seyitwb-svg.github.io/grand-line-fleet/llms.txt>
-- MIT verifier (receipt-parsing, 5 RPC fallbacks):
-  <https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py>
+regulated, subscriptions with complex billing.</p>
+<h2>A working store doing exactly this</h2>
+<ul>
+<li>21 self-hosted apps, sold via BTC/USDT/x402:
+<a href="https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=/shop">https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&amp;p=/shop</a></li>
+<li>Agent docs + payable endpoint list:
+<a href="https://seyitwb-svg.github.io/grand-line-fleet/llms.txt">https://seyitwb-svg.github.io/grand-line-fleet/llms.txt</a></li>
+<li>MIT verifier (receipt-parsing, 5 RPC fallbacks):
+<a href="https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py">https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py</a></li>
+</ul>
 
 <hr>
 <p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
