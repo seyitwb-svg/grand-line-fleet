@@ -59,6 +59,42 @@ same tx re-serves the result (idempotent).
 - MIT sample (judge the code): https://github.com/seyitwb-svg/qrdock
 - Repo: https://github.com/seyitwb-svg/grand-line-fleet
 
+## Guides (stable URLs, LLM-crawlable)
+
+- https://seyitwb-svg.github.io/grand-line-fleet/g/uptime-robot-alternative.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/google-forms-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/notion-docs-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/sell-digital-products-bitcoin.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/docker-self-hosted-stack-small-vps.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/newsletter-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/verify-crypto-payments-across-chains.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/webhook-inbox-for-agents.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/index.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/how-it-works.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/self-hosted-feedback-board.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/self-hosted-form-backend.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/self-hosted-status-page.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/privacy-analytics.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/self-hosted-cron-monitoring.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/buy-source-code.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/crypto-checkout-no-kyc.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/self-hosted-typeform.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/calendly-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/linktree-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/disqus-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/onetimesecret-alternative.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/testimonial-to-alternative.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/og-image-generator-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/harvest-alternative-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/waitlist-tool-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/client-portal-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/invoice-generator-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/quote-software-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/changelog-page-self-hosted.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/sell-apis-to-ai-agents-x402.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/x402-endpoint-python-fastapi.html
+- https://seyitwb-svg.github.io/grand-line-fleet/g/monetize-api-without-stripe.html
+
 ## Notes
 
 - Prices in atomic units: 1 USDC cent = 10,000 units (6 decimals).
