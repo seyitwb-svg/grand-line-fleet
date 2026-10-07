@@ -35,9 +35,14 @@ on a 4 €/month VPS.
 Python + FastAPI + SQLite + Docker, ~50 MB RAM each. Shared `grkit`
 auth/db layer vendored per app — every app deploys standalone in minutes.
 
+## Free sample
+
+**QRDock is MIT-licensed** — inspect the exact code quality you're buying:
+[github.com/seyitwb-svg/qrdock](https://github.com/seyitwb-svg/qrdock)
+
 ## Buy the source
 
-**$99 one-time — all 20 apps, complete source, deploy docs.**
+**$99 one-time — all 21 apps, complete source, deploy docs.**
 
 Payment is a plain on-chain transfer (BTC or USDT-TRC20). Your download
 unlocks automatically after 1 network confirmation. You own the code —
