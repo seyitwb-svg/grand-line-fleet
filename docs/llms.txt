@@ -35,10 +35,11 @@ same tx re-serves the result (idempotent).
   — multi-chain settlement attestation (USDC-Base sats-BTC units-USDT-TRC20),
   Settlement attestation: which addresses received how much USDC in `tx`,
   block number, receipt id. ~$0.002 (exact amount given per order).
-- GET {goldshop}/x402/{item} — buy source packages. Items: `bundle` ($99,
-  all 21 apps), `app:goldshop` ($49, this checkout itself),
-  `app:<slug>` ($29 each), `x402stack` ($9, secretdock+ogdock+qrdock —
-  the three agent-payable apps). Returns a download URL after on-chain
+- GET {goldshop}/x402/{item} — buy source packages. Items: `hello`
+  (~$0.01 — test the purchase flow end-to-end), `x402stack` ($9,
+  secretdock+ogdock+qrdock — the three agent-payable apps),
+  `app:<slug>` ($29 each), `app:goldshop` ($49, this checkout itself),
+  `bundle` ($99, all 21 apps). Returns a download URL after on-chain
   verify.
 - GET {ogdock}/x402/og.png — OG/social image render, $0.005 per call.
 - GET {qrdock}/x402/qr.png — QR PNG render, $0.005 per call.
