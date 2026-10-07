@@ -38,8 +38,9 @@ same tx re-serves the result (idempotent).
   all 21 apps), `app:goldshop` ($49, this checkout itself),
   `app:<slug>` ($29 each). Returns a download URL after on-chain verify.
 - GET {ogdock}/x402/og.png — OG/social image render, $0.005 per call.
+- GET {qrdock}/x402/qr.png — QR PNG render, $0.005 per call.
 - POST {secretdock}/x402/s — burn-after-read secret link, $0.01.
-- GET {goldshop}/.well-known/x402 — full resource discovery (25 entries).
+- GET {goldshop}/.well-known/x402 — full resource discovery (26 entries).
 
 ## Human surfaces
 
