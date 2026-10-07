@@ -16,6 +16,9 @@
 #   * Receipts arrive while pending: `status` may be missing or "0x0" — only
 #     accept "0x1". Optionally require confirmations via blockNumber vs
 #     eth_blockNumber if your goods are worth more than a reorg costs.
+#   * Set a User-Agent: several public RPCs 403 bare `Python-urllib`
+#     (and occasionally other default library UAs) under load — a neutral
+#     UA like `x402-verifier/1.0` stays unblocked. httpx/curl are fine.
 
 import json
 import urllib.request
@@ -39,7 +42,8 @@ def _rpc(method, params):
     for rpc in RPCS:
         try:
             r = urllib.request.urlopen(urllib.request.Request(
-                rpc, body, {"content-type": "application/json"}), timeout=12)
+                rpc, body, {"content-type": "application/json",
+                            "user-agent": "x402-verifier/1.0"}), timeout=12)
             res = json.loads(r.read())
             if "result" in res:
                 return res["result"]
