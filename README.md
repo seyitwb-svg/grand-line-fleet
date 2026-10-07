@@ -12,7 +12,7 @@ Every tool below is **live right now** — click through and inspect the
 real product before buying anything. The whole fleet runs on ~1 GB RAM
 on a 4 €/month VPS.
 
-**Read:** [the fleet story](https://telegra.ph/21-self-hosted-micro-SaaS-tools-on-one-4-EUR-VPS-and-how-the-crypto-checkout-works-10-07) · [how the KYC-free checkout works](https://telegra.ph/Accept-bitcoin-for-downloads-without-KYC--the-200-line-checkout-10-07) · nostr: npub1qjewu586lvgsswge2jmycj4ncjm4k7hfkfyc3hmh6eka4eyvjdwsehgw5l
+**Read:** [the fleet story](https://telegra.ph/21-self-hosted-micro-SaaS-tools-on-one-4-EUR-VPS-and-how-the-crypto-checkout-works-10-07) · [how the KYC-free checkout works](https://telegra.ph/Accept-bitcoin-for-downloads-without-KYC--the-200-line-checkout-10-07) · [why it beats a boilerplate](https://telegra.ph/The-99-boilerplate-that-is-not-Nextjs--21-shipping-PythonSQLite-apps-10-07) · nostr: npub1qjewu586lvgsswge2jmycj4ncjm4k7hfkfyc3hmh6eka4eyvjdwsehgw5l
 
 ## The 20 apps
 
