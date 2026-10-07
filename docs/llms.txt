@@ -47,7 +47,9 @@ same tx re-serves the result (idempotent).
 - POST {secretdock}/x402/s — burn-after-read secret link, $0.01.
 - GET/POST {formdock}/x402/inbox — webhook inbox: unique capture URL +
   private read endpoint, $0.01. Read via GET {formdock}/x402/inbox/{oid}.
-- GET {goldshop}/.well-known/x402 — full resource discovery (29 entries).
+- GET/POST {surveydock}/x402/poll?title=&q=&options=a,b,c — create a
+  public poll: shareable vote link + live results link, $0.02.
+- GET {goldshop}/.well-known/x402 — full resource discovery (31 entries).
 
 ## Human surfaces
 
