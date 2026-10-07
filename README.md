@@ -3,7 +3,7 @@
 ![apps](https://img.shields.io/badge/apps-21-orange)
 ![runtime](https://img.shields.io/badge/runtime-python%2Bsqlite-green)
 ![deploy](https://img.shields.io/badge/deploy-docker-blue)
-![payment](https://img.shields.io/badge/payment-BTC%2BUSDT-f7931a)
+![payment](https://img.shields.io/badge/payments-BTC%20%2B%20USDT%20%2B%20x402-f7931a)
 
 Own the code. Skip the rent. One flat price — paid in BTC or USDT,
 delivered automatically on-chain. No Stripe, no account, no KYC.
@@ -13,6 +13,16 @@ real product before buying anything. The whole fleet runs on ~1 GB RAM
 on a 4 €/month VPS.
 
 **Read:** [the fleet story](https://telegra.ph/21-self-hosted-micro-SaaS-tools-on-one-4-EUR-VPS-and-how-the-crypto-checkout-works-10-07) · [how the KYC-free checkout works](https://telegra.ph/Accept-bitcoin-for-downloads-without-KYC--the-200-line-checkout-10-07) · [why it beats a boilerplate](https://telegra.ph/The-99-boilerplate-that-is-not-Nextjs--21-shipping-PythonSQLite-apps-10-07) · nostr: npub1qjewu586lvgsswge2jmycj4ncjm4k7hfkfyc3hmh6eka4eyvjdwsehgw5l
+
+## Guides (33, indexed)
+
+Every guide explains the problem, the self-hosted fix, and links the
+live demo: [guides index](https://seyitwb-svg.github.io/grand-line-fleet/g/)
+· e.g. [sell APIs to AI agents via x402](https://seyitwb-svg.github.io/grand-line-fleet/g/sell-apis-to-ai-agents-x402.html)
+· [x402 endpoint in Python](https://seyitwb-svg.github.io/grand-line-fleet/g/x402-endpoint-python-fastapi.html)
+· [monetize without Stripe](https://seyitwb-svg.github.io/grand-line-fleet/g/monetize-api-without-stripe.html)
+
+Machine directory for agents: [llms.txt](https://seyitwb-svg.github.io/grand-line-fleet/llms.txt)
 
 ## The 20 apps
 
