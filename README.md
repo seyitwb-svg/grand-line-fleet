@@ -48,8 +48,8 @@ Payment is a plain on-chain transfer (BTC or USDT-TRC20). Your download
 unlocks automatically after 1 network confirmation. You own the code —
 modify it, self-host it, never think about subscriptions again.
 
-🛒 **Shop:** https://cork-barcelona-chance-seasonal.trycloudflare.com/shop
-📊 **Live status:** https://stars-hugo-just-robin.trycloudflare.com/s/st-907738732f
+🛒 **Shop:** see `LIVE-URLS.txt` (auto-synced; tunnels rotate) — currently https://cork-barcelona-chance-seasonal.trycloudflare.com/shop
+📊 **Live status:** in `LIVE-URLS.txt` (currently https://stars-hugo-just-robin.trycloudflare.com/s/st-907738732f)
 
 ## Why crypto-only
 
