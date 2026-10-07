@@ -1,0 +1,99 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>x402 in Python: a complete payable endpoint (FastAPI) — Grand Line Guides</title>
+<meta name="description" content="# x402 in Python: a complete payable endpoint (FastAPI)
+
+A working, production-reviewed x402 endpoint is ~150 lines: demand a
+payment, verify it on-ch">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/x402-endpoint-python-fastapi.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+# x402 in Python: a complete payable endpoint (FastAPI)
+
+A working, production-reviewed x402 endpoint is ~150 lines: demand a
+payment, verify it on-chain, serve the resource. This is the exact
+pattern running on four endpoints of a live software store.
+
+## The pieces
+
+```python
+# 1. Demand — answer 402 with a UNIQUE order amount
+oid = secrets.token_hex(6)
+units = BASE_PRICE + secrets.randbelow(10_000)   # jitter!
+db.exec("INSERT INTO x402_calls(oid,units,created) VALUES(?,?,?)",
+        (oid, units, now))
+return JSONResponse(pay_req(oid, units), status_code=402)
+```
+
+`pay_req` returns `x402Version: 2`, `accepts[0]` with
+`scheme: "exact"`, `network: "eip155:8453"`, `amount: str(units)`,
+the USDC contract `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`,
+your `payTo`, and `extra.orderId` = oid. The resource URL embeds
+`?oid={oid}`.
+
+```python
+# 2. Redeem — verify exact units to payTo, claim atomically
+units, ok = usdc_to_payto(tx_hash)          # receipt parse, not getLogs
+if not ok or units != call["units"]:        # EXACT match or reject
+    return 402
+try:
+    db.exec("INSERT INTO x402_tx(txid) VALUES(?)", (tx_hash,))
+except IntegrityError:                       # already claimed — reject
+    return 402
+db.exec("UPDATE x402_calls SET status='redeemed', txid=? WHERE oid=?",
+        (tx_hash, oid))
+return serve_resource()
+```
+
+## Why the jitter
+
+If every order demands the same amount, a single public tx hash
+redeems *all* of them — buyers just reuse a hash they find on-chain.
+A per-order `base + randbelow(10000)` atomic-unit amount means each
+order has a unique price; the tx's actual USDC transfers must sum to
+exactly that for your `payTo`. One payment → one order, fleet-wide.
+
+## X-PAYMENT parsing
+
+Accept all three shapes buyers send:
+
+```python
+raw = request.headers.get("x-payment", "")
+if raw.startswith("0x") and len(raw) == 66:
+    txh = raw
+elif raw.startswith("{"):
+    txh = json.loads(raw)["payload"]["txHash"]
+else:                                        # base64 spec JSON
+    txh = json.loads(base64.b64decode(raw))["payload"]["txHash"]
+```
+
+## On-chain verification without a facilitator
+
+`eth_getTransactionReceipt` on any public Base RPC, then sum the USDC
+`Transfer` logs where `topic[2]` (the recipient) equals your address:
+
+- set a neutral `User-Agent` (bare `Python-urllib` is 403'd under load)
+- `status == "0x1"` only; pending receipts lack it
+- check `log.address == USDC` — other contracts emit Transfer too
+
+MIT drop-in with 5 RPC fallbacks:
+<https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py>
+
+## Idempotent re-serve
+
+Agents retry. `status='redeemed' AND txid=<same>` → serve the stored
+result again; `redeemed AND txid=<different>` → 402 error. Never
+double-charge, never lose a paid request to a flaky connection.
+
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>

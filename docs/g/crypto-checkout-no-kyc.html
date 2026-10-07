@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paying for software in BTC without KYC — how our checkout works — Grand Line Guides</title>
+<meta name="description" content="# Paying for software in BTC — how our checkout works
+
+We sell self-hosted source. Self-hosters shouldn&#x27;t need to hand identity
+documents to a payment">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/crypto-checkout-no-kyc.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+# Paying for software in BTC — how our checkout works
+
+We sell self-hosted source. Self-hosters shouldn't need to hand identity
+documents to a payment processor to buy code.
+
+## The mechanics
+
+1. You click buy - we quote an **exact** satoshi amount (plus a tiny unique
+   jitter) and a BTC address — or a USDT-TRC20 amount for stablecoin payers.
+2. You send the transfer from any wallet or exchange.
+3. We watch the mempool via public APIs; the unique amount identifies your
+   order. One network confirmation - your download link unlocks.
+
+No account, no email verification, no card. The payment itself is the
+receipt — your txid is the proof of purchase.
+
+## Why it matters for liability
+
+There is no merchant account to freeze, no platform to deplatform either
+side, and no personal data to leak — we store an order id, an amount, and
+a txid.
+
+[The shop](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=%2Fshop)
+
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>

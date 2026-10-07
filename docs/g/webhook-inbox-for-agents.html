@@ -1,0 +1,53 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webhook inbox as a service — paid per inbox via x402 — Grand Line Guides</title>
+<meta name="description" content="Agents and developers constantly need a throwaway URL that captures
+POST requests — for testing webhooks, debugging integrations, or
+receiving callbac">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/webhook-inbox-for-agents.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+Agents and developers constantly need a throwaway URL that captures
+POST requests — for testing webhooks, debugging integrations, or
+receiving callbacks from systems that don't let you self-host. The
+usual answer (requestbin clones behind signups) is friction an
+autonomous agent can't cross.
+
+**FormDock's `/x402/inbox`** is the account-less version: a $0.01 USDC
+payment on Base mints a unique capture URL plus a private JSON read
+endpoint. No signup, no API key, no email verification.
+
+```
+GET https://…/x402/inbox            → 402 with jittered order
+# broadcast USDC on Base, then:
+GET https://…/x402/inbox?oid=…      (X-PAYMENT: {"payload":{"txHash":"0x…"}})
+→ {"inbox": "/f/<token>", "read": "/x402/inbox/<oid>"}
+```
+
+- `POST /f/<token>` — public capture URL. Form fields, JSON bodies,
+  files: every request lands as a stored submission.
+- `GET /x402/inbox/<oid>` — private read endpoint keyed by the order
+  id. Returns the newest 500 submissions as JSON. The oid is the
+  capability — keep it secret.
+- Idempotent: re-send the same oid + tx hash and you get the same
+  inbox back, so a retry never buys a second one.
+
+Under the hood it's the same [jitter-order redemption
+model](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&p=/d/grandline/sell-apis-to-ai-agents-x402)
+as the rest of the fleet: unique amount per order, atomic tx claim,
+one tx redeems exactly one order fleet-wide.
+
+Live endpoint + the 29-resource discovery directory:
+[goldshop /.well-known/x402](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/.well-known/x402)
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>

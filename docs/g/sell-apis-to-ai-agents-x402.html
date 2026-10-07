@@ -1,0 +1,83 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to sell an API to AI agents (x402 on Base, no facilitator) — Grand Line Guides</title>
+<meta name="description" content="# Sell an API to AI agents — x402 on Base, no facilitator
+
+AI agents with wallets are a real buyer segment now: they browse service
+directories, see a">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/sell-apis-to-ai-agents-x402.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+# Sell an API to AI agents — x402 on Base, no facilitator
+
+AI agents with wallets are a real buyer segment now: they browse service
+directories, see an HTTP 402, pay USDC on Base, and consume the resource —
+no account, no API key, no checkout page. This guide shows the exact
+serving pattern that survived an adversarial security review in
+production.
+
+## The flow (facilitator-free `exact` scheme)
+
+1. Agent `GET`s your payable resource.
+2. You answer `402` with an `accepts` array: USDC contract on Base
+   (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`), network
+   `eip155:8453`, your `payTo` address — **and a unique jittered amount
+   plus a unique order id embedded in `resource.url`**.
+3. The agent broadcasts a USDC transfer of *exactly* that amount.
+4. It retries the order'd URL with the tx hash in `X-PAYMENT`
+   (spec JSON or a bare `0x…` both work).
+5. You verify on-chain and serve. Re-requesting the same order id
+   returns the same requirement (no re-jitter); re-presenting the same
+   tx re-serves the result (idempotent).
+
+## The four traps that cost real money
+
+- **Replay across orders.** If every order demands the same price, one
+  public tx hash redeems *everything*. Fix: jitter each amount
+  (`base + randbelow(10_000)` atomic units) and require exact match.
+- **Check-then-insert races.** `SELECT txid …; INSERT txid` under two
+  concurrent redeemers double-serves. Fix: `INSERT` on a PK'd table
+  *first*, catch `IntegrityError` — that is your claim.
+- **eth_getLogs rate limits.** Public Base RPCs cap log queries on the
+  USDC contract at single digits per day. `eth_getTransactionReceipt`
+  is unlimited and carries the same Transfer events — parse it.
+- **Default library UAs.** Bare `Python-urllib` gets 403'd on public
+  RPCs under load. Set any neutral `User-Agent`.
+
+## Reference verifier (MIT)
+
+Drop-in ~100-line implementation with 5 RPC fallbacks:
+`usdc_transfers(tx) → ({recipient: units}, block, ok)` and
+`paid_at_least(tx, payTo, min)`.
+
+<https://seyitwb-svg.github.io/grand-line-fleet/x402_verifier.py>
+
+## Live example
+
+Our own store sells 21 self-hosted apps over this rail, plus a $0.002
+settlement-attestation endpoint (check whether *someone else's* tx
+actually paid you):
+
+- Agent docs: <https://seyitwb-svg.github.io/grand-line-fleet/llms.txt>
+- Store: <https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop>
+
+## Notes for sellers
+
+- `status == "0x1"` only — pending receipts arrive without it.
+- Sub-cent goods can skip block-confirmation waits; anything priced in
+  dollars should require a few confirmations.
+- Keep a per-order idempotent re-serve path — agents retry, and a lost
+  connection must not mean a lost sale.
+
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>

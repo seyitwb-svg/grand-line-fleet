@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verify crypto payments on 3 chains with one API call — Grand Line Guides</title>
+<meta name="description" content="A paid settlement attestation endpoint that answers the one
+question every crypto-paid service eventually asks: did transaction X
+actually pay at leas">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/verify-crypto-payments-across-chains.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+A paid settlement attestation endpoint that answers the one
+question every crypto-paid service eventually asks: did transaction X
+actually pay at least N units to address Y?
+
+**The endpoint** lives on the [Grand Line store](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop) and is payable via x402 — $0.002 USDC on Base per check, no account, no API key, no signup.
+
+```
+GET /x402/verify?tx=<txid>&to=<addr>&min=<units>&chain=base|bitcoin|tron
+```
+
+| chain   | `tx` format      | `min` units          | independent check via |
+|---------|------------------|----------------------|-----------------------|
+| base    | `0x<64 hex>`     | USDC atomic units    | Base RPC receipt      |
+| bitcoin | `<64 hex txid>`  | satoshis             | mempool.space         |
+| tron    | `<64 hex txid>`  | USDT-TRC20 units     | TronGrid              |
+
+**The answer** is a JSON attestation: `verified`, the amount that
+actually reached `to`, confirmations, and a stable `receipt_id` you can
+store. Unconfirmed bitcoin transactions verify `false` — a conservative
+default you should copy.
+
+**Why three chains?** Every x402 verifier we have seen is EVM-only. But
+real buyers still pay in BTC and USDT. If your product accepts more than
+one chain, your settlement check should too — ideally from a party that
+is not you and not your payment processor.
+
+**How to pay it**: send exactly the USDC amount the 402 response demands
+(accepts[0].amount) to payTo on Base, then repeat the request with
+`X-PAYMENT: {"payload":{"txHash":"0x..."}}`. The order model is
+replay-safe: unique jittered amount per order, atomic tx claim,
+idempotent re-serve.
+
+Related: [sell APIs to AI agents with x402](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&p=/d/grandline/sell-apis-to-ai-agents-x402) · [monetize an API without Stripe](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=markdock&p=/d/grandline/monetize-api-without-stripe)
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>
