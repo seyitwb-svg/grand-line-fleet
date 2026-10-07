@@ -41,6 +41,7 @@ same tx re-serves the result (idempotent).
   `app:<slug>` ($29 each), `app:goldshop` ($49, this checkout itself),
   `bundle` ($99, all 21 apps). Returns a download URL after on-chain
   verify.
+- GET {goldshop}/x402/tokeninfo?address=<0x..> — ERC-20 info on Base: name, symbol, decimals, supply, contract size. ~$0.005/check.
 - GET {ogdock}/x402/og.png — OG/social image render, $0.005 per call.
 - GET {qrdock}/x402/qr.png — QR PNG render, $0.005 per call.
 - GET {markdock}/x402/render — markdown → CommonMark HTML, $0.002.
