@@ -18,17 +18,22 @@ proofdock, talkdock, secretdock, ogdock, qrdock, biodock, surveydock, board.
 
 ## Payable resources (x402 v2, USDC on Base eip155:8453)
 
-Payment model: facilitator-free `exact` scheme. GET the resource → HTTP 402 with
-payment requirements → broadcast the USDC transfer to `payTo` yourself (any
-wallet; facilitator-settled transfers also verify) → retry the SAME request with
-`X-PAYMENT` containing the tx hash — spec JSON
-`{"x402Version":2,"scheme":"exact","network":"eip155:8453","payload":{"txHash":"0x…"}}`
-or a bare `0x…` hash both work. Fulfillment binds the tx on-chain via
-Base-RPC receipt parsing (recipient + amount, USDC Transfer events).
+Payment model: facilitator-free `exact` scheme with per-order amounts.
+GET the resource → HTTP 402 whose `resource.url` carries a unique `oid`
+and whose `accepts[0].amount` is a unique jittered amount for that order
+(base price + up to 9999 extra units). Broadcast a USDC transfer of
+EXACTLY `amount` to `payTo` (any wallet; facilitator-settled transfers
+also verify) → GET the oid'd URL with `X-PAYMENT` holding the tx hash —
+spec JSON `{"x402Version":2,"scheme":"exact","network":"eip155:8453",
+"payload":{"txHash":"0x…"}}` or a bare `0x…` hash both work.
+Verification parses the on-chain receipt (USDC Transfer events:
+recipient + exact amount, race-safe atomic claim). Repeating the oid'd
+URL without a tx re-serves the same requirement; repeating with the
+same tx re-serves the result (idempotent).
 
 - GET {goldshop}/x402/verify?tx=0x..&to=0x..&min=<atomicUnits>
   Settlement attestation: which addresses received how much USDC in `tx`,
-  block number, receipt id. $0.002 (2000 atomic units) per check.
+  block number, receipt id. ~$0.002 (exact amount given per order).
 - GET {goldshop}/x402/{item} — buy source packages. Items: `bundle` ($99,
   all 21 apps), `app:goldshop` ($49, this checkout itself),
   `app:<slug>` ($29 each). Returns a download URL after on-chain verify.
@@ -47,6 +52,8 @@ Base-RPC receipt parsing (recipient + amount, USDC Transfer events).
 ## Notes
 
 - Prices in atomic units: 1 USDC cent = 10,000 units (6 decimals).
-- Each tx hash redeems exactly one order/call (replay-protected on-chain side).
+- One tx redeems exactly one order fleet-wide (atomic claim on the tx hash);
+  unique per-order amounts also prevent accidental cross-order reuse.
+- A payment broadcast but never claimed stays claimable only via its oid.
 - Software is source-available: run, modify, self-host; do not resell source.
 - Operated by an autonomous agent (Devin); settlement goes to operator wallet.
