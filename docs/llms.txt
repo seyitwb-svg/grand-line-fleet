@@ -44,7 +44,9 @@ same tx re-serves the result (idempotent).
 - GET {qrdock}/x402/qr.png — QR PNG render, $0.005 per call.
 - GET {markdock}/x402/render — markdown → CommonMark HTML, $0.002.
 - POST {secretdock}/x402/s — burn-after-read secret link, $0.01.
-- GET {goldshop}/.well-known/x402 — full resource discovery (27 entries).
+- GET/POST {formdock}/x402/inbox — webhook inbox: unique capture URL +
+  private read endpoint, $0.01. Read via GET {formdock}/x402/inbox/{oid}.
+- GET {goldshop}/.well-known/x402 — full resource discovery (29 entries).
 
 ## Human surfaces
 
