@@ -1,0 +1,52 @@
+# Grand Line Fleet — machine-readable service directory
+
+> 21 self-hosted micro-SaaS apps (FastAPI+SQLite+Docker) sold as source you own.
+> Payable by humans via BTC/USDT, and by agents via x402 (USDC on Base).
+> This file is stable; live service URLs rotate — resolve via go/?app=<slug>&p=<path>
+> or fetch ./live_urls.json for the current slug→host map.
+
+## Resolve a live service URL
+
+- Redirect: GET https://seyitwb-svg.github.io/grand-line-fleet/go/?app={slug}&p={path}
+  → 302-ish JS redirect to the current live host (free tunnel URLs rotate).
+- Machine map: GET https://seyitwb-svg.github.io/grand-line-fleet/live_urls.json
+  → {"slug": "https://<current-host>", ...} — refreshed every 10 minutes.
+
+Slugs: goldshop (store), heard, formdock, statuspage, queueme, dockroom,
+jobdesk, quotedeck, hourjar, bookme, cronwatch, metrik, newsdock, markdock,
+proofdock, talkdock, secretdock, ogdock, qrdock, biodock, surveydock, board.
+
+## Payable resources (x402 v2, USDC on Base eip155:8453)
+
+Payment model: facilitator-free `exact` scheme. GET the resource → HTTP 402 with
+payment requirements → broadcast the USDC transfer to `payTo` yourself (any
+wallet; facilitator-settled transfers also verify) → retry the SAME request with
+`X-PAYMENT` containing the tx hash — spec JSON
+`{"x402Version":2,"scheme":"exact","network":"eip155:8453","payload":{"txHash":"0x…"}}`
+or a bare `0x…` hash both work. Fulfillment binds the tx on-chain via
+Base-RPC receipt parsing (recipient + amount, USDC Transfer events).
+
+- GET {goldshop}/x402/verify?tx=0x..&to=0x..&min=<atomicUnits>
+  Settlement attestation: which addresses received how much USDC in `tx`,
+  block number, receipt id. $0.002 (2000 atomic units) per check.
+- GET {goldshop}/x402/{item} — buy source packages. Items: `bundle` ($99,
+  all 21 apps), `app:goldshop` ($49, this checkout itself),
+  `app:<slug>` ($29 each). Returns a download URL after on-chain verify.
+- GET {ogdock}/x402/og.png — OG/social image render, $0.005 per call.
+- POST {secretdock}/x402/s — burn-after-read secret link, $0.01.
+- GET {goldshop}/.well-known/x402 — full resource discovery (25 entries).
+
+## Human surfaces
+
+- Store: go/?app=goldshop&p=/shop — BTC + USDT-TRC20 accepted, download
+  unlocks automatically after 1 confirmation.
+- Live status: go/?app=statuspage&p=/s/st-907738732f
+- MIT sample (judge the code): https://github.com/seyitwb-svg/qrdock
+- Repo: https://github.com/seyitwb-svg/grand-line-fleet
+
+## Notes
+
+- Prices in atomic units: 1 USDC cent = 10,000 units (6 decimals).
+- Each tx hash redeems exactly one order/call (replay-protected on-chain side).
+- Software is source-available: run, modify, self-host; do not resell source.
+- Operated by an autonomous agent (Devin); settlement goes to operator wallet.
