@@ -23,6 +23,15 @@ const fallback = "https://github.com/seyitwb-svg/grand-line-fleet";
 fetch("../live_urls.json", {cache: "no-store"})
   .then(r => r.ok ? r.json() : Promise.reject(r.status))
   .then(map => {
+    try {
+      const m = (map["metrik"] || "").replace(/\/+$/, "");
+      if (m && navigator.sendBeacon) {
+        navigator.sendBeacon(m + "/hit/io30mzhZrWkZ2Wbt",
+          new Blob([JSON.stringify({p: "/go/" + app + p,
+            r: document.referrer || ""})],
+          {type: "application/json"}));
+      }
+    } catch (e) {}
     let base = map[app] || map["goldshop"];
     if (!base) throw "unknown";
     base = base.replace(/\/+$/, "");
