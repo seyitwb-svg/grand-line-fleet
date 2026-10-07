@@ -1,0 +1,68 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get listed on x402scan: SIWX + openapi + tunnel workaround — Grand Line Guides</title>
+<meta name="description" content="# Listing a seller on x402scan: the registry flow that actually works
+
+x402scan.com is where paying agents discover endpoints. Registration is
+free bu">
+<link rel="canonical" href="https://seyitwb-svg.github.io/grand-line-fleet/g/x402scan-seller-registration.html">
+<style>
+ body{font-family:system-ui,sans-serif;max-width:46em;margin:2em auto;
+   padding:0 1em;line-height:1.6;color:#1a1a1a}
+ h1{line-height:1.25} code,pre{background:#f4f4f4;border-radius:4px}
+ pre{padding:.8em;overflow-x:auto} code{padding:.1em .3em}
+ a{color:#0a58ca} nav{font-size:.9em;margin-bottom:2em;color:#666}
+</style>
+<nav><a href="../">Grand Line Fleet</a> · <a href="./">Guides</a> ·
+ <a href="../go/?app=goldshop&p=/shop">Shop ($99 bundle)</a></nav>
+<h1>Listing a seller on x402scan: the registry flow that actually works</h1>
+<p>x402scan.com is where paying agents discover endpoints. Registration is
+free but three non-obvious gates stand between &quot;I have a 402 endpoint&quot;
+and &quot;I'm listed&quot;. This is the exact path that got a 21-app fleet
+registered — 20 resources under one origin.</p>
+<h2>Gate 1: your origin must not be a denylisted tunnel</h2>
+<p>The checker rejects ephemeral tunnel domains by hostname suffix:
+<code>trycloudflare.com</code>, <code>ngrok*</code>, <code>localtunnel</code>, <code>localhost.run</code>, and
+friends are refused at the challenge step — no matter how valid your
+402 is. Two SSH tunnels that are NOT on the list:</p>
+<ul>
+<li><strong>Pinggy</strong> — <code>ssh -p443 -R0:localhost:PORT a.pinggy.io</code>, no account,
+assigns <code>*.free.pinggy.net</code> / <code>*.run.pinggy-free.link</code> (rotates on
+reconnect — keep a watcher that re-registers)</li>
+<li>localhost.run-style services that produce other suffixes</li>
+</ul>
+<p>A real domain is cleaner, but a non-denylisted tunnel is enough to get
+listed today.</p>
+<h2>Gate 2: SIWX — Sign-In-With-X wallet auth</h2>
+<p>The register endpoint answers <code>402</code> with a
+<code>extensions[&quot;sign-in-with-x&quot;]</code> challenge. Build the EIP-191 SIWE
+message from <code>info</code> fields (domain, uri, version, chainId, nonce,
+issuedAt — plus expirationTime/notBefore when present), sign with your
+payTo wallet's key, and retry with a <code>SIGN-IN-WITH-X: base64(payload)</code>
+header where payload carries every SIWE field plus <code>signature</code>. The key
+point: the signer must be the wallet that receives payments — that is
+the ownership proof.</p>
+<h2>Gate 3: the scanner probes POST and reads your openapi.json</h2>
+<p>Two subtleties:</p>
+<ul>
+<li>Every payable route must answer <strong>POST</strong> too, not only GET — the
+probe POSTs and a <code>405</code> gets the resource skipped.</li>
+<li>Serve <code>/openapi.json</code> with an <code>x-payment-info</code> extension per paid op
+(<code>{&quot;protocols&quot;:[{&quot;x402&quot;:{}}],&quot;price&quot;:{&quot;mode&quot;:&quot;fixed&quot;,&quot;currency&quot;:&quot;USD&quot;, &quot;amount&quot;:&quot;0.005&quot;}}</code>) — the scanner lists every path it finds there.
+Also add <code>info.contact.email</code> or the registration warns you can't
+claim the merchant page.</li>
+</ul>
+<p>For extra credit add <code>extensions.bazaar</code> (input/output schema per
+endpoint) to each 402 body — newer indexers read it for richer cards.</p>
+<h2>The order model that passes review</h2>
+<p>Each challenge we issue carries a unique jittered amount
+(<code>base + randbelow(10000)</code> atomic units) and an <code>orderId</code> embedded in
+the resource URL (<code>?oid=</code>). Redemption requires the exact amount for
+that order and atomically claims the tx hash — one payment can't
+unlock two orders, and a tx can't be replayed across resources.</p>
+
+<hr>
+<p style="color:#666;font-size:.9em">Part of the Grand Line Fleet —
+21 self-hosted tools, one VPS. <a href="../llms.txt">llms.txt</a> ·
+<a href="../go/?app=goldshop&p=/shop">Store</a></p>
