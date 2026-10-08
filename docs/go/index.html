@@ -20,8 +20,11 @@ const qs = new URLSearchParams(location.search);
 const app = (qs.get("app") || "goldshop").replace(/[^a-z0-9-]/g, "");
 const p = qs.get("p") || "";
 const fallback = "https://github.com/seyitwb-svg/grand-line-fleet";
+// static fallback: the storefront origin never depends on the JSON fetch
+const STATIC = {goldshop: "https://grandline-fleet.shares.zrok.io"};
 fetch("../live_urls.json", {cache: "no-store"})
   .then(r => r.ok ? r.json() : Promise.reject(r.status))
+  .catch(() => STATIC)
   .then(map => {
     try {
       const m = (map["metrik"] || "").replace(/\/+$/, "");
