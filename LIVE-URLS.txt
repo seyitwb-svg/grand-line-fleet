@@ -1,5 +1,5 @@
-# Current live URLs (auto-synced 2026-10-07T18:00Z)
-SHOP=https://cork-barcelona-chance-seasonal.trycloudflare.com
+# Current live URLs (auto-synced 2026-10-08T00:22Z)
+SHOP=https://grandline-fleet.shares.zrok.io
 STATUS=https://stars-hugo-just-robin.trycloudflare.com/s/st-907738732f
 PORTFOLIO=https://winston-gregory-dvd-establishment.trycloudflare.com/d/grandline
 GO=https://seyitwb-svg.github.io/grand-line-fleet/go/
