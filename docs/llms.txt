@@ -52,7 +52,14 @@ same tx re-serves the result (idempotent).
   private read endpoint, $0.01. Read via GET {formdock}/x402/inbox/{oid}.
 - GET/POST {surveydock}/x402/poll?title=&q=&options=a,b,c — create a
   public poll: shareable vote link + live results link, $0.02.
-- GET {goldshop}/.well-known/x402 — full resource discovery (31 entries).
+- GET {keydock}/x402/license — signed license key + payment receipt
+  for agent commerce, $0.01.
+- Single-origin aliases: all six app endpoints above are also reachable
+  through the store as {goldshop}/x402/proxy/{ogpng|qrpng|burnlink|
+  mdrender|webhookinbox|livepoll|keylicense} — same prices.
+- Curl examples for every endpoint:
+  https://seyitwb-svg.github.io/grand-line-fleet/x402-api-examples.md
+- GET {goldshop}/.well-known/x402 — full resource discovery (29 entries).
 
 ## Human surfaces
 
