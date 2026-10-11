@@ -14,6 +14,22 @@ on a 4 €/month VPS.
 
 **Read:** [the fleet story](https://telegra.ph/21-self-hosted-micro-SaaS-tools-on-one-4-EUR-VPS-and-how-the-crypto-checkout-works-10-07) · [how the KYC-free checkout works](https://telegra.ph/Accept-bitcoin-for-downloads-without-KYC--the-200-line-checkout-10-07) · [why it beats a boilerplate](https://telegra.ph/The-99-boilerplate-that-is-not-Nextjs--21-shipping-PythonSQLite-apps-10-07) · nostr: npub1qjewu586lvgsswge2jmycj4ncjm4k7hfkfyc3hmh6eka4eyvjdwsehgw5l
 
+## For agent builders — live x402 endpoints
+
+Try it now: `curl -i https://grandline-fleet.shares.zrok.io/x402/hello` →
+HTTP 402 with a real USDC price (Base, exact scheme). Pay, retry with your
+txHash in `X-PAYMENT`, get the resource. No account, no API key, no
+facilitator — we verify the on-chain receipt directly.
+
+7+ paid endpoints live (pagescan, tokeninfo, HN search, enrichment,
+secret links, live polls, agent license keys) — machine catalog at
+[`/.well-known/x402`](https://grandline-fleet.shares.zrok.io/.well-known/x402)
+and [`/openapi.json`](https://grandline-fleet.shares.zrok.io/openapi.json).
+Want to sell the same way? The code is for sale:
+**$9** [x402stack](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop&src=github) starter ·
+**$49** [goldshop](https://seyitwb-svg.github.io/grand-line-fleet/go/?app=goldshop&p=/shop&src=github) storefront source ·
+[curl walkthrough](https://seyitwb-svg.github.io/grand-line-fleet/x402-api-examples.md)
+
 ## Guides (33, indexed)
 
 Every guide explains the problem, the self-hosted fix, and links the
