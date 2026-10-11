@@ -40,6 +40,9 @@ fetch("../live_urls.json", {cache: "no-store"})
     base = base.replace(/\/+$/, "");
     let dest = base;
     if (p && p.startsWith("/") && !p.startsWith("//")) dest += p;
+    // attribution: every redirect through /go/ comes from the GitHub Pages site
+    const src = (qs.get("src") || "github").replace(/[^a-z0-9_-]/g, "");
+    if (src) dest += (dest.includes("?") ? "&" : "?") + "src=" + src;
     document.getElementById("h").textContent = "→ " + app;
     document.getElementById("msg").innerHTML = "Live at <a href=\"" + dest + "\">" + dest + "</a>";
     location.replace(dest);
