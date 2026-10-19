@@ -1,5 +1,5 @@
-# Current live URLs (auto-synced 2026-10-15T01:30Z)
+# Current live URLs (auto-synced 2026-10-19T15:30Z)
 SHOP=https://grandline-fleet.shares.zrok.io
-STATUS=https://ordered-paid-referring-pennsylvania.trycloudflare.com/s/st-907738732f
-PORTFOLIO=https://miami-writings-var-specifications.trycloudflare.com/d/grandline
+STATUS=https://lol-workshop-rod-bay.trycloudflare.com/s/st-907738732f
+PORTFOLIO=https://medical-tom-refers-truck.trycloudflare.com/d/grandline
 GO=https://seyitwb-svg.github.io/grand-line-fleet/go/
